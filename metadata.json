@@ -1,0 +1,6 @@
+{
+  "name": "Profil Modèle",
+  "description": "Page de profil épurée et moderne avec bouton de contact WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
