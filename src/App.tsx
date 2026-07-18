@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   MessageCircle, 
   Check, 
@@ -14,7 +14,10 @@ import {
   AlertTriangle,
   Flame,
   X,
-  Play
+  Play,
+  ArrowRight,
+  Pause,
+  Mic
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -75,6 +78,8 @@ const galleryItems = [
   }
 ];
 
+const waveformHeights = [3, 5, 8, 4, 6, 9, 12, 10, 8, 11, 14, 12, 10, 8, 6, 9, 11, 8, 5, 7, 9, 6, 4, 3];
+
 export default function App() {
   // App parameters as provided by the user
   const name = "Amira sun";
@@ -90,6 +95,111 @@ export default function App() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [visitorCountry, setVisitorCountry] = useState("ton pays");
   const [activeMedia, setActiveMedia] = useState<typeof galleryItems[0] | null>(null);
+
+  // Lock Page State
+  const [isUnlocked, setIsUnlocked] = useState(() => localStorage.getItem("bizi_unlocked") === "true");
+  const [enteredCode, setEnteredCode] = useState("");
+  const [codeError, setCodeError] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+
+  // WhatsApp Voice Note State
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState(16);
+  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // WhatsApp Profile Voice Note State
+  const [isProfileAudioPlaying, setIsProfileAudioPlaying] = useState(false);
+  const [profileAudioDuration, setProfileAudioDuration] = useState(16);
+  const [profileAudioCurrentTime, setProfileAudioCurrentTime] = useState(0);
+  const profileAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleAudioPlay = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+        setIsAudioPlaying(false);
+      } else {
+        audioRef.current.play().catch(e => console.error(e));
+        setIsAudioPlaying(true);
+      }
+    }
+  };
+
+  const toggleProfileAudioPlay = () => {
+    if (profileAudioRef.current) {
+      if (isProfileAudioPlaying) {
+        profileAudioRef.current.pause();
+        setIsProfileAudioPlaying(false);
+      } else {
+        profileAudioRef.current.play().catch(e => console.error(e));
+        setIsProfileAudioPlaying(true);
+      }
+    }
+  };
+
+  const handleAudioTimeUpdate = () => {
+    if (audioRef.current) {
+      setAudioCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleProfileAudioTimeUpdate = () => {
+    if (profileAudioRef.current) {
+      setProfileAudioCurrentTime(profileAudioRef.current.currentTime);
+    }
+  };
+
+  const handleAudioLoadedMetadata = () => {
+    if (audioRef.current) {
+      setAudioDuration(audioRef.current.duration || 16);
+    }
+  };
+
+  const handleProfileAudioLoadedMetadata = () => {
+    if (profileAudioRef.current) {
+      setProfileAudioDuration(profileAudioRef.current.duration || 16);
+    }
+  };
+
+  const handleAudioEnded = () => {
+    setIsAudioPlaying(false);
+    setAudioCurrentTime(0);
+  };
+
+  const handleProfileAudioEnded = () => {
+    setIsProfileAudioPlaying(false);
+    setProfileAudioCurrentTime(0);
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (audioRef.current && audioDuration) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      const percentage = Math.max(0, Math.min(1, clickX / width));
+      audioRef.current.currentTime = percentage * audioDuration;
+      setAudioCurrentTime(percentage * audioDuration);
+    }
+  };
+
+  const handleProfileSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (profileAudioRef.current && profileAudioDuration) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      const percentage = Math.max(0, Math.min(1, clickX / width));
+      profileAudioRef.current.currentTime = percentage * profileAudioDuration;
+      setProfileAudioCurrentTime(percentage * profileAudioDuration);
+    }
+  };
+
+  const formatTime = (time: number) => {
+    if (isNaN(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
 
   // Fetch visitor country by IP for personalization
   useEffect(() => {
@@ -132,8 +242,264 @@ export default function App() {
     setTimeout(() => setShowShareToast(false), 3000);
   };
 
+  const handleUnlock = () => {
+    if (enteredCode.trim().toLowerCase() === "m2026") {
+      setIsUnlocked(true);
+      localStorage.setItem("bizi_unlocked", "true");
+    } else {
+      setCodeError(true);
+    }
+  };
+
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen w-full bg-[#f8fafc] flex items-center justify-center p-4 sm:p-6 select-none relative overflow-hidden font-sans">
+        {/* Subtle decorative circles for modern design */}
+        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/5 blur-3xl pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-md bg-white rounded-[32px] p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-slate-100 flex flex-col items-center relative"
+        >
+          {/* Amira's profile picture */}
+          <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-md border-2 border-white/80 aspect-square">
+            <img 
+              src={profileImg} 
+              alt={name} 
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          {/* Heading and sub */}
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-5 uppercase tracking-tight text-center">
+            ESPACE BIZI
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1 text-center leading-relaxed px-2">
+            Écoute le message vocal privé d'Amira ci-dessous pour trouver le code d'accès
+          </p>
+
+          <audio
+            ref={audioRef}
+            src="https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/c8729470-bf92-47c8-9597-aaa02dcc2b06.mp3"
+            onTimeUpdate={handleAudioTimeUpdate}
+            onLoadedMetadata={handleAudioLoadedMetadata}
+            onEnded={handleAudioEnded}
+            preload="metadata"
+          />
+
+          {/* WhatsApp Voice Message Bubble */}
+          <div className="w-full mt-5">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[11px] font-bold text-[#128C7E] tracking-wider uppercase">
+                Message Vocal Privé d'Amira
+              </span>
+            </div>
+
+            <div className="w-full flex justify-start my-1.5 font-sans select-none text-left">
+              <div className="relative bg-[#025144] hover:bg-[#035f50] transition-all duration-300 text-white rounded-2xl rounded-tl-none p-3.5 pr-4 shadow-xl w-full flex gap-3 border border-emerald-900/40">
+                {/* Tail of the bubble (WhatsApp style) */}
+                <div className="absolute top-0 left-[-8px] w-0 h-0 border-t-[12px] border-t-[#025144] border-l-[8px] border-l-transparent pointer-events-none" />
+
+                {/* Avatar + Mic Overlay */}
+                <div className="relative shrink-0 select-none">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border border-emerald-800 bg-[#12222a] relative">
+                    <img 
+                      src={profileImg} 
+                      alt={name} 
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  {/* Microphone badge overlapping the profile avatar */}
+                  <div className="absolute bottom-[-1px] right-[-3px] bg-[#025144] rounded-full p-0.5 border border-emerald-800">
+                    <div className="bg-[#25D366] rounded-full p-0.5 flex items-center justify-center">
+                      <Mic className="w-2.5 h-2.5 text-[#025144] stroke-[3]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Control & Waveform Content */}
+                <div className="flex-grow flex flex-col justify-between pt-0.5">
+                  <div className="flex items-center gap-2">
+                    {/* Play/Pause Button */}
+                    <button 
+                      onClick={toggleAudioPlay}
+                      className="shrink-0 w-8 h-8 rounded-full bg-[#0b3e36] hover:bg-[#12584c] flex items-center justify-center text-white active:scale-95 transition-all duration-200 cursor-pointer shadow-inner"
+                    >
+                      {isAudioPlaying ? (
+                        <Pause className="w-4 h-4 text-white fill-current" />
+                      ) : (
+                        <Play className="w-4 h-4 text-white fill-current pl-0.5" />
+                      )}
+                    </button>
+
+                    {/* Waveform container */}
+                    <div 
+                      onClick={handleSeek}
+                      className="flex-grow h-8 flex items-center gap-[2.5px] cursor-pointer relative group/wave select-none"
+                    >
+                      {/* Simulated Waveform Bars */}
+                      {waveformHeights.map((height, idx) => {
+                        const barProgress = idx / waveformHeights.length;
+                        const currentProgress = audioCurrentTime / (audioDuration || 1);
+                        const isPlayed = currentProgress >= barProgress;
+                        return (
+                          <div 
+                            key={idx}
+                            className={`w-[2.5px] rounded-full transition-all duration-150 ${
+                              isPlayed ? "bg-[#34b7f1]" : "bg-[#8696a0]/40"
+                            }`}
+                            style={{ 
+                              height: `${Math.max(4, height * 1.8)}px`,
+                              opacity: isPlayed ? 1 : 0.7
+                            }}
+                          />
+                        );
+                      })}
+                      
+                      {/* Seeker bubble indicator */}
+                      <div 
+                        className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#34b7f1] shadow opacity-0 group-hover/wave:opacity-100 transition-opacity pointer-events-none"
+                        style={{ left: `${Math.min(100, (audioCurrentTime / (audioDuration || 1)) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Info Row: Time elapsed/duration & Sent timestamp + Double Checkticks */}
+                  <div className="flex items-center justify-between text-[10px] text-[#93c5be] mt-1 select-none font-semibold">
+                    <span>
+                      {isAudioPlaying ? formatTime(audioCurrentTime) : formatTime(audioDuration)}
+                    </span>
+                    <div className="flex items-center gap-1.5 text-[#93c5be]/80">
+                      <span>
+                        {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      {/* WhatsApp Double Blue Check Ticks */}
+                      <div className="flex items-center text-[#34b7f1]">
+                        <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <Check className="w-3.5 h-3.5 -ml-2.5 stroke-[2.5]" />
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Code box */}
+          <div className="w-full bg-[#fafbfe] border border-slate-100 rounded-2xl p-4.5 mt-6 flex flex-col items-center">
+            <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase mb-2.5">
+              VOTRE CODE D'ACCÈS
+            </span>
+            <div className="flex items-center gap-2 w-full justify-center">
+              <span className="bg-[#eff4ff] text-[#2563eb] px-5 py-2 rounded-xl text-sm font-bold font-mono tracking-wider shadow-sm">
+                M2026
+              </span>
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText("M2026");
+                  setCopiedCode(true);
+                  setTimeout(() => setCopiedCode(false), 2000);
+                }}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 transition-all duration-200 shadow-sm hover:border-slate-300 cursor-pointer active:scale-95"
+              >
+                {copiedCode ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-500 stroke-[3]" />
+                    <span className="text-emerald-600">Copié !</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Copier</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Password Input */}
+          <div className="w-full mt-6 text-left">
+            <label className="text-[11px] font-extrabold text-slate-700 tracking-wider mb-2 block uppercase">
+              CODE D'ACCÈS
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input 
+                type="text" 
+                placeholder="Saisir le code..." 
+                value={enteredCode} 
+                onChange={(e) => { 
+                  setEnteredCode(e.target.value); 
+                  setCodeError(false); 
+                }} 
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleUnlock();
+                  }
+                }}
+                className={`w-full bg-[#f8fafc] border ${codeError ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-200/80 focus:border-blue-500 focus:ring-blue-500'} rounded-xl py-3.5 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 transition-all font-medium`}
+              />
+            </div>
+            
+            <AnimatePresence>
+              {codeError && (
+                <motion.p 
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="text-xs text-rose-500 font-semibold mt-1.5 flex items-center gap-1"
+                >
+                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                  <span>Code incorrect. Utilisez le code 'M2026'</span>
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Access Button */}
+          <button 
+            onClick={handleUnlock}
+            className="w-full flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 mt-4.5 cursor-pointer active:scale-[0.99]"
+          >
+            <span className="text-[14px]">Accéder</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          {/* Footer SSL Access */}
+          <div className="flex items-center justify-center gap-2 mt-7 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+            <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
+            <span>ACCÈS SÉCURISÉ SSL</span>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-neutral-950 flex items-center justify-center p-0 sm:p-6 select-none relative overflow-x-hidden">
+      <audio
+        ref={audioRef}
+        src="https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/c8729470-bf92-47c8-9597-aaa02dcc2b06.mp3"
+        onTimeUpdate={handleAudioTimeUpdate}
+        onLoadedMetadata={handleAudioLoadedMetadata}
+        onEnded={handleAudioEnded}
+        preload="metadata"
+      />
+      <audio
+        ref={profileAudioRef}
+        src="https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b0e38832-cd08-4c3e-b2e4-ff1a3879fc30.mp3"
+        onTimeUpdate={handleProfileAudioTimeUpdate}
+        onLoadedMetadata={handleProfileAudioLoadedMetadata}
+        onEnded={handleProfileAudioEnded}
+        preload="metadata"
+      />
       
       {/* Absolute Decorative Ambient Background Blurs */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-rose-500/10 blur-[120px] pointer-events-none" />
@@ -216,6 +582,112 @@ export default function App() {
                     <p className="text-[14.5px] leading-relaxed text-neutral-300 font-light whitespace-pre-line">
                       {description}
                     </p>
+                  </div>
+
+                  {/* Message vocal push call-to-action */}
+                  <div className="mt-6 pt-5 border-t border-neutral-900/60">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+                        <span className="text-[11.5px] font-bold text-[#25D366] tracking-wider uppercase">
+                          Message Vocal Privé d'Amira
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-extrabold text-[#34b7f1] bg-[#34b7f1]/10 px-2 py-0.5 rounded-full uppercase tracking-widest animate-bounce">
+                        Écouter 🤫
+                      </span>
+                    </div>
+
+                    <div className="w-full flex justify-start my-1 font-sans select-none text-left">
+                      <div className="relative bg-[#025144] hover:bg-[#035f50] transition-all duration-300 text-white rounded-2xl rounded-tl-none p-3.5 pr-4 shadow-xl w-full flex gap-3 border border-emerald-900/40">
+                        {/* Tail of the bubble (WhatsApp style) */}
+                        <div className="absolute top-0 left-[-8px] w-0 h-0 border-t-[12px] border-t-[#025144] border-l-[8px] border-l-transparent pointer-events-none" />
+
+                        {/* Avatar + Mic Overlay */}
+                        <div className="relative shrink-0 select-none">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border border-emerald-800 bg-[#12222a] relative">
+                            <img 
+                              src={profileImg} 
+                              alt={name} 
+                              className="w-full h-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                          {/* Microphone badge overlapping the profile avatar */}
+                          <div className="absolute bottom-[-1px] right-[-3px] bg-[#025144] rounded-full p-0.5 border border-emerald-800">
+                            <div className="bg-[#25D366] rounded-full p-0.5 flex items-center justify-center">
+                              <Mic className="w-2.5 h-2.5 text-[#025144] stroke-[3]" />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Control & Waveform Content */}
+                        <div className="flex-grow flex flex-col justify-between pt-0.5">
+                          <div className="flex items-center gap-2">
+                            {/* Play/Pause Button */}
+                            <button 
+                              onClick={toggleProfileAudioPlay}
+                              className="shrink-0 w-8 h-8 rounded-full bg-[#0b3e36] hover:bg-[#12584c] flex items-center justify-center text-white active:scale-95 transition-all duration-200 cursor-pointer shadow-inner"
+                            >
+                              {isProfileAudioPlaying ? (
+                                <Pause className="w-4 h-4 text-white fill-current" />
+                              ) : (
+                                <Play className="w-4 h-4 text-white fill-current pl-0.5" />
+                              )}
+                            </button>
+
+                            {/* Waveform container */}
+                            <div 
+                              onClick={handleProfileSeek}
+                              className="flex-grow h-8 flex items-center gap-[2.5px] cursor-pointer relative group/wave select-none"
+                            >
+                              {/* Simulated Waveform Bars */}
+                              {waveformHeights.map((height, idx) => {
+                                const barProgress = idx / waveformHeights.length;
+                                const currentProgress = profileAudioCurrentTime / (profileAudioDuration || 1);
+                                const isPlayed = currentProgress >= barProgress;
+                                return (
+                                  <div 
+                                    key={idx}
+                                    className={`w-[2.5px] rounded-full transition-all duration-150 ${
+                                      isPlayed ? "bg-[#34b7f1]" : "bg-[#8696a0]/40"
+                                    }`}
+                                    style={{ 
+                                      height: `${Math.max(4, height * 1.8)}px`,
+                                      opacity: isPlayed ? 1 : 0.7
+                                    }}
+                                  />
+                                );
+                              })}
+                              
+                              {/* Seeker bubble indicator */}
+                              <div 
+                                className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#34b7f1] shadow opacity-0 group-hover/wave:opacity-100 transition-opacity pointer-events-none"
+                                style={{ left: `${Math.min(100, (profileAudioCurrentTime / (profileAudioDuration || 1)) * 100)}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Info Row: Time elapsed/duration & Sent timestamp + Double Checkticks */}
+                          <div className="flex items-center justify-between text-[10px] text-[#93c5be] mt-1 select-none font-semibold">
+                            <span>
+                              {isProfileAudioPlaying ? formatTime(profileAudioCurrentTime) : formatTime(profileAudioDuration)}
+                            </span>
+                            <div className="flex items-center gap-1.5 text-[#93c5be]/80">
+                              <span>
+                                {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {/* WhatsApp Double Blue Check Ticks */}
+                              <div className="flex items-center text-[#34b7f1]">
+                                <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                                <Check className="w-3.5 h-3.5 -ml-2.5 stroke-[2.5]" />
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* WhatsApp Action Button (Triggers paywall screen) */}
