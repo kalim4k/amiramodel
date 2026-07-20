@@ -27,55 +27,64 @@ const galleryItems = [
     id: 1,
     type: "image",
     title: "Je suce en plein air 👅",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/2e865e42-43b8-4b78-98c9-64c050095d79.jpeg"
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/2e865e42-43b8-4b78-98c9-64c050095d79.jpeg",
+    locked: false
   },
   {
     id: 2,
     type: "image",
     title: "Il me met des doigts 😻",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b08fd204-449a-4ec8-b9e4-e5fbe27b3f24.jpeg"
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b08fd204-449a-4ec8-b9e4-e5fbe27b3f24.jpeg",
+    locked: false
   },
   {
     id: 3,
     type: "image",
     title: "Je suce à cause de la Défaite de la France 🇫🇷 😣",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/958e1e08-98bc-4dbc-85d5-4768ce4627ba.jpeg"
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/958e1e08-98bc-4dbc-85d5-4768ce4627ba.jpeg",
+    locked: false
   },
   {
     id: 4,
     type: "image",
-    title: "Un avant goût 🌹",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b7a22a37-0f87-457b-bdbd-8cf967b78c52.jpeg"
+    title: "je mougou avec un elève dans une classe",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b7a22a37-0f87-457b-bdbd-8cf967b78c52.jpeg",
+    locked: true
   },
   {
     id: 5,
     type: "image",
-    title: "Moment de complicité 🔥",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/4469696f-f050-48c2-8cd5-59dbd0c1817f.jpeg"
+    title: "je suce chez lui",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/4469696f-f050-48c2-8cd5-59dbd0c1817f.jpeg",
+    locked: true
   },
   {
     id: 6,
     type: "image",
-    title: "Rien que pour toi... 💋",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/35ec6e2a-a7f1-462c-a226-ccd9e0f58e31.jpeg"
+    title: "il met des doigts",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/35ec6e2a-a7f1-462c-a226-ccd9e0f58e31.jpeg",
+    locked: true
   },
   {
     id: 7,
     type: "image",
-    title: "Petite tenue du jour 🖤",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/5d113165-113e-478f-b55c-2bb9f2df99a6.jpeg"
+    title: "mougouli avec le prof de math",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/5d113165-113e-478f-b55c-2bb9f2df99a6.jpeg",
+    locked: true
   },
   {
     id: 8,
     type: "image",
-    title: "Prête pour ce soir ? 💦",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/e261b096-0ce0-400f-a527-46c2fbfb50d3.jpeg"
+    title: "ce jeune eleve sait bien mougou deh",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/e261b096-0ce0-400f-a527-46c2fbfb50d3.jpeg",
+    locked: true
   },
   {
     id: 9,
     type: "video",
-    title: "Ma petite surprise... 🎁",
-    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/cb323039-1a6e-49ee-a753-c825538f2ee8.mp4"
+    title: "mougouli en douce... 🤫",
+    url: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/cb323039-1a6e-49ee-a753-c825538f2ee8.mp4",
+    locked: true
   }
 ];
 
@@ -218,7 +227,7 @@ export default function App() {
   
   // Custom URLs provided by the user
   const profileImg = "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/39459b08-ed49-4496-b031-16079d0cbc78.png";
-  const coverImg = "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/f9252670-db08-49fd-81b5-aaf11dee5bc0.png";
+  const coverImg = "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/648e9bad-b3d7-49bc-ae96-086a85c7e12d.png";
   const isVerified = true;
 
   const [showShareToast, setShowShareToast] = useState(false);
@@ -389,7 +398,7 @@ export default function App() {
   };
 
   const handleUnlock = () => {
-    if (enteredCode.trim().toLowerCase() === "m2026") {
+    if (enteredCode.trim().toLowerCase() === "n2026") {
       setIsUnlocked(true);
       localStorage.setItem("bizi_unlocked", "true");
     } else {
@@ -545,11 +554,11 @@ export default function App() {
             </span>
             <div className="flex items-center gap-2 w-full justify-center">
               <span className="bg-[#eff4ff] text-[#2563eb] px-5 py-2 rounded-xl text-sm font-bold font-mono tracking-wider shadow-sm">
-                M2026
+                N2026
               </span>
               <button 
                 onClick={() => {
-                  navigator.clipboard.writeText("M2026");
+                  navigator.clipboard.writeText("N2026");
                   setCopiedCode(true);
                   setTimeout(() => setCopiedCode(false), 2000);
                 }}
@@ -866,44 +875,73 @@ export default function App() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-2">
-                      {galleryItems.map((item) => (
-                        <motion.div
-                          key={item.id}
-                          className="relative aspect-square rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800/80 cursor-pointer group"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => setActiveMedia(item)}
-                        >
-                          {item.type === "video" ? (
-                            <div className="w-full h-full relative">
-                              <video
-                                src={item.url}
-                                className="w-full h-full object-cover"
-                                muted
-                                loop
-                                playsInline
-                                autoPlay
-                              />
-                              <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
-                                <Play className="w-5 h-5 text-white fill-current opacity-80" />
-                              </div>
+                      {galleryItems.map((item) => {
+                        const isLocked = item.locked;
+                        return (
+                          <motion.div
+                            key={item.id}
+                            className="relative aspect-square rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800/80 cursor-pointer group"
+                            whileHover={{ scale: isLocked ? 1.01 : 1.03 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => {
+                              if (isLocked) {
+                                setShowPaywall(true);
+                              } else {
+                                setActiveMedia(item);
+                              }
+                            }}
+                          >
+                            {/* Media with conditional blur */}
+                            <div className={`w-full h-full ${isLocked ? "blur-[7px] brightness-[0.6] scale-105" : ""}`}>
+                              {item.type === "video" ? (
+                                <div className="w-full h-full relative">
+                                  <video
+                                    src={item.url}
+                                    className="w-full h-full object-cover"
+                                    muted
+                                    loop
+                                    playsInline
+                                    autoPlay
+                                  />
+                                  {!isLocked && (
+                                    <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
+                                      <Play className="w-5 h-5 text-white fill-current opacity-80" />
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <img
+                                  src={item.url}
+                                  alt={item.title}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                  referrerPolicy="no-referrer"
+                                />
+                              )}
                             </div>
-                          ) : (
-                            <img
-                              src={item.url}
-                              alt={item.title}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              referrerPolicy="no-referrer"
-                            />
-                          )}
-                          {/* Title Overlay on Hover */}
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <p className="text-[10px] text-neutral-200 line-clamp-1 text-center leading-normal font-light">
-                              {item.title}
-                            </p>
-                          </div>
-                        </motion.div>
-                      ))}
+
+                            {/* Padlock Icon centered overlay for locked items */}
+                            {isLocked && (
+                              <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/10">
+                                <div className="w-8 h-8 rounded-full bg-black/75 backdrop-blur-md flex items-center justify-center border border-neutral-800 shadow-lg text-rose-500">
+                                  <Lock className="w-4 h-4 stroke-[2.5]" />
+                                </div>
+                                <span className="text-[8px] font-black text-rose-400 bg-rose-950/90 px-1.5 py-0.5 rounded uppercase tracking-wider border border-rose-900/40">
+                                  Bloqué 🔒
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Title Overlay (always visible for locked items, hover-reveal or always visible for others. Let's make it always visible for locked, and hover or always visible for all! Always visible is best as requested) */}
+                            <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-1.5 transition-opacity duration-200 ${
+                              isLocked ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                            }`}>
+                              <p className="text-[9px] sm:text-[9.5px] text-neutral-200 line-clamp-2 text-center leading-tight font-medium">
+                                {item.title}
+                              </p>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -998,7 +1036,7 @@ export default function App() {
                 {/* Ultimate Conversion Checkout CTA Button */}
                 <div className="mt-6">
                   <motion.a
-                    href="https://izimomo.vercel.app/pay"
+                    href="https://preview--paypal-unlocked-africa.lovable.app/confirm"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-black font-bold text-[15px] tracking-wide uppercase py-4 px-6 rounded-2xl shadow-xl shadow-emerald-500/10 transition-all duration-300 cursor-pointer"
@@ -1032,23 +1070,23 @@ export default function App() {
                     Voici quelques-unes de mes copines disponibles {visitorCountry} pour mougouli. Tu leur écris sur WhatsApp, vous donnez RDV ou tu vas directement chez elles :
                   </p>
 
-                  <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5">
                     {copinesData.map((girl) => (
                       <div
                         key={girl.id}
-                        className="bg-[#111111] rounded-2xl border border-neutral-900/60 p-2.5 flex flex-col justify-between hover:border-neutral-800/80 transition-all duration-300"
+                        className="bg-[#111111] rounded-xl border border-neutral-900/60 p-1.5 sm:p-2.5 flex flex-col justify-between hover:border-neutral-800/80 transition-all duration-300"
                       >
                         <div>
                           {/* Girl Image */}
-                          <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-950">
+                          <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden bg-neutral-950">
                             <img
                               src={girl.image}
                               alt={girl.name}
                               className="w-full h-full object-cover"
                               referrerPolicy="no-referrer"
                             />
-                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md py-0.5 px-2 rounded-full border border-neutral-800/50">
-                              <span className="text-[9px] text-[#25D366] font-bold flex items-center gap-1">
+                            <div className="absolute top-1 left-1 bg-black/60 backdrop-blur-md py-0.5 px-1.5 rounded-full border border-neutral-800/50">
+                              <span className="text-[7.5px] sm:text-[9px] text-[#25D366] font-bold flex items-center gap-0.5 sm:gap-1">
                                 <span className="w-1 h-1 rounded-full bg-[#25D366] animate-ping" />
                                 En ligne
                               </span>
@@ -1056,18 +1094,12 @@ export default function App() {
                           </div>
 
                           {/* Details */}
-                          <div className="mt-2.5 px-0.5">
-                            <h4 className="text-[14.5px] font-bold text-white tracking-tight leading-tight">
+                          <div className="mt-1.5 px-0.5">
+                            <h4 className="text-[11px] sm:text-[13.5px] font-bold text-white tracking-tight leading-tight line-clamp-1">
                               {girl.name}
                             </h4>
-                            
-                            <div className="flex items-center gap-1 mt-1">
-                              <Star className="w-3 h-3 text-amber-400 fill-current" />
-                              <span className="text-[11px] font-bold text-amber-400">{girl.rating}</span>
-                              <span className="text-[9.5px] text-neutral-500">({girl.reviews} avis)</span>
-                            </div>
 
-                            <p className="text-[10.5px] text-neutral-400 font-light mt-1.5 leading-snug line-clamp-2">
+                            <p className="text-[9px] sm:text-[10.5px] text-neutral-400 font-light mt-1 leading-snug line-clamp-2">
                               {girl.status}
                             </p>
                           </div>
@@ -1075,13 +1107,13 @@ export default function App() {
 
                         <div>
                           {/* WhatsApp Blurred Number Row */}
-                          <div className="mt-3 bg-neutral-950 border border-neutral-900 rounded-xl p-2 flex flex-col items-center justify-center">
-                            <span className="text-[8.5px] font-extrabold text-neutral-500 tracking-wider uppercase mb-0.5">
+                          <div className="mt-2 bg-neutral-950 border border-neutral-900 rounded-lg p-1 sm:p-2 flex flex-col items-center justify-center">
+                            <span className="text-[7px] sm:text-[8.5px] font-extrabold text-neutral-500 tracking-wider uppercase mb-0.5">
                               WHATSAPP
                             </span>
-                            <div className="flex items-center gap-0.5 font-mono text-[11.5px] font-bold text-white">
+                            <div className="flex items-center gap-0.5 font-mono text-[9px] sm:text-[11.5px] font-bold text-white">
                               <span className="text-[#25D366]">{visitorCallingCode}</span>
-                              <span className="blur-[3px] select-none text-slate-400 tracking-wider"> 65•••</span>
+                              <span className="blur-[2px] select-none text-slate-400 tracking-wider"> 65••</span>
                             </div>
                           </div>
 
@@ -1095,9 +1127,9 @@ export default function App() {
                                 setTimeout(() => el.classList.remove("ring-4", "ring-[#25D366]/40"), 1500);
                               }
                             }}
-                            className="w-full mt-2 flex items-center justify-center gap-1 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 text-[#25D366] font-semibold text-[11px] py-1.5 px-2.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-95"
+                            className="w-full mt-1.5 flex items-center justify-center gap-0.5 sm:gap-1 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 text-[#25D366] font-semibold text-[9px] sm:text-[11px] py-1 px-1.5 sm:py-1.5 sm:px-2.5 rounded-lg transition-all duration-200 cursor-pointer active:scale-95"
                           >
-                            <Lock className="w-3 h-3 shrink-0" />
+                            <Lock className="w-2.5 h-2.5 shrink-0" />
                             <span>Débloquer</span>
                           </button>
                         </div>
