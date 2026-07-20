@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   MessageCircle, 
   Check, 
@@ -17,7 +17,8 @@ import {
   Play,
   ArrowRight,
   Pause,
-  Mic
+  Mic,
+  Star
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -80,6 +81,135 @@ const galleryItems = [
 
 const waveformHeights = [3, 5, 8, 4, 6, 9, 12, 10, 8, 11, 14, 12, 10, 8, 6, 9, 11, 8, 5, 7, 9, 6, 4, 3];
 
+const callingCodes: Record<string, string> = {
+  "BJ": "+229",
+  "CI": "+225",
+  "CM": "+237",
+  "GA": "+241",
+  "SN": "+221",
+  "ML": "+223",
+  "TG": "+228",
+  "BF": "+226",
+  "NE": "+227",
+  "CG": "+242",
+  "CD": "+243",
+  "GN": "+224",
+  "FR": "+33",
+  "BE": "+32",
+  "CH": "+41",
+  "CA": "+1",
+  "MA": "+212",
+  "DZ": "+213",
+  "TN": "+216"
+};
+
+const copinesData = [
+  {
+    id: 1,
+    name: "Muna",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/1c556238-675e-4d63-ba4e-9fb35c01b50f.jpg",
+    status: "Disponible à l'hôtel ou à domicile",
+    rating: "4.9",
+    reviews: "18"
+  },
+  {
+    id: 2,
+    name: "Smile",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/4beacec3-2eb0-4879-b895-d715e58ae9b1.jpg",
+    status: "Déplacement rapide & discrète",
+    rating: "4.8",
+    reviews: "12"
+  },
+  {
+    id: 3,
+    name: "Phoenix",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/2a181396-d3b8-4f57-aafe-aae901edaa7d.jpg",
+    status: "Reçoit 24h/24 dans son appartement",
+    rating: "5.0",
+    reviews: "25"
+  },
+  {
+    id: 4,
+    name: "Aurora",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/297189a4-ab07-4fa8-a29f-94ee4f4baf48.jpg",
+    status: "Massage sensuel & plus",
+    rating: "4.7",
+    reviews: "15"
+  },
+  {
+    id: 5,
+    name: "Arlene",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/ffa395c1-628e-4826-bd7f-6f947cb5a5fb.jpg",
+    status: "Disponible immédiatement",
+    rating: "4.9",
+    reviews: "9"
+  },
+  {
+    id: 6,
+    name: "Diva",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b25a3ab0-49d0-452a-98bd-e62c7d824c91.jpg",
+    status: "Plan direct très chaud 💋",
+    rating: "4.9",
+    reviews: "21"
+  },
+  {
+    id: 7,
+    name: "Muna VIP",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/11639f87-eb19-4578-b639-1a54ce90daea.webp",
+    status: "Reçoit en toute discrétion",
+    rating: "4.8",
+    reviews: "14"
+  },
+  {
+    id: 8,
+    name: "Smile Hot",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/1780e468-f6b8-439b-be66-160d01799ceb.webp",
+    status: "Spécialiste du mougouli doux",
+    rating: "5.0",
+    reviews: "32"
+  },
+  {
+    id: 9,
+    name: "Phoenix Rose",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/b7f5a026-58b3-4c2f-bd24-d23014154429.webp",
+    status: "Disponible uniquement ce soir",
+    rating: "4.6",
+    reviews: "8"
+  },
+  {
+    id: 10,
+    name: "Aurora Star",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/e939235d-1f01-446f-8817-a900f62d450a.webp",
+    status: "Dispo à tout moment",
+    rating: "4.9",
+    reviews: "19"
+  },
+  {
+    id: 11,
+    name: "Arlene Sweet",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/55620d2d-9ed3-4359-9703-72ea6e3c3bad.webp",
+    status: "Expérience inoubliable garantie",
+    rating: "4.9",
+    reviews: "11"
+  },
+  {
+    id: 12,
+    name: "Diva Queen",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/691c5a14-b476-4edd-bb0b-04d581bc4193.webp",
+    status: "Mougouli sauvage ou doux 🔥",
+    rating: "5.0",
+    reviews: "27"
+  },
+  {
+    id: 13,
+    name: "Muna Chic",
+    image: "https://ysbiedwkakdqadxtuwab.supabase.co/storage/v1/object/public/uploads/6c2cdce1-6989-483c-83e4-1c3d2b9a151b.webp",
+    status: "Dispo pour te satisfaire",
+    rating: "4.8",
+    reviews: "16"
+  }
+];
+
 export default function App() {
   // App parameters as provided by the user
   const name = "Amira sun";
@@ -94,6 +224,7 @@ export default function App() {
   const [showShareToast, setShowShareToast] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [visitorCountry, setVisitorCountry] = useState("ton pays");
+  const [visitorCallingCode, setVisitorCallingCode] = useState("+229");
   const [activeMedia, setActiveMedia] = useState<typeof galleryItems[0] | null>(null);
 
   // Lock Page State
@@ -206,12 +337,21 @@ export default function App() {
     fetch("https://ipapi.co/json/")
       .then((res) => res.json())
       .then((data) => {
-        if (data && data.country_name) {
-          let name = data.country_name;
-          if (name.toLowerCase() === "côte d'ivoire" || name.toLowerCase() === "cote d'ivoire") {
-            setVisitorCountry("en Côte d'Ivoire");
-          } else {
-            setVisitorCountry(`au ${name}`);
+        if (data) {
+          if (data.country_name) {
+            let name = data.country_name;
+            if (name.toLowerCase() === "côte d'ivoire" || name.toLowerCase() === "cote d'ivoire") {
+              setVisitorCountry("en Côte d'Ivoire");
+            } else {
+              setVisitorCountry(`au ${name}`);
+            }
+          }
+          if (data.country_calling_code) {
+            let pfx = data.country_calling_code;
+            if (!pfx.startsWith("+")) pfx = "+" + pfx;
+            setVisitorCallingCode(pfx);
+          } else if (data.country_code && callingCodes[data.country_code.toUpperCase()]) {
+            setVisitorCallingCode(callingCodes[data.country_code.toUpperCase()]);
           }
         }
       })
@@ -220,17 +360,23 @@ export default function App() {
         fetch("https://ip-api.com/json")
           .then((res) => res.json())
           .then((data) => {
-            if (data && data.country) {
-              let name = data.country;
-              if (name.toLowerCase() === "côte d'ivoire" || name.toLowerCase() === "cote d'ivoire") {
-                setVisitorCountry("en Côte d'Ivoire");
-              } else {
-                setVisitorCountry(`au ${name}`);
+            if (data) {
+              if (data.country) {
+                let name = data.country;
+                if (name.toLowerCase() === "côte d'ivoire" || name.toLowerCase() === "cote d'ivoire") {
+                  setVisitorCountry("en Côte d'Ivoire");
+                } else {
+                  setVisitorCountry(`au ${name}`);
+                }
+              }
+              if (data.countryCode && callingCodes[data.countryCode.toUpperCase()]) {
+                setVisitorCallingCode(callingCodes[data.countryCode.toUpperCase()]);
               }
             }
           })
           .catch(() => {
             setVisitorCountry("dans ton pays");
+            setVisitorCallingCode("+229");
           });
       });
   }, []);
@@ -867,6 +1013,96 @@ export default function App() {
                   <div className="flex items-center justify-center gap-5 mt-4 text-[11px] text-neutral-500 font-medium">
                     <span className="flex items-center gap-1">🔒 Paiement Sécurisé</span>
                     <span className="flex items-center gap-1">⚡ Déblocage Immédiat</span>
+                  </div>
+                </div>
+
+                {/* Elegant Girls Gallery Section as requested */}
+                <div className="mt-12 pt-8 border-t border-neutral-900/80">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-bold text-neutral-200 tracking-wider uppercase flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                      Mes Copines Disponibles ({visitorCountry})
+                    </h3>
+                    <span className="text-[10px] text-[#25D366] font-bold bg-[#25D366]/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      Active 🟢
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs text-neutral-400 leading-relaxed mb-6 font-light">
+                    Voici quelques-unes de mes copines disponibles {visitorCountry} pour mougouli. Tu leur écris sur WhatsApp, vous donnez RDV ou tu vas directement chez elles :
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
+                    {copinesData.map((girl) => (
+                      <div
+                        key={girl.id}
+                        className="bg-[#111111] rounded-2xl border border-neutral-900/60 p-2.5 flex flex-col justify-between hover:border-neutral-800/80 transition-all duration-300"
+                      >
+                        <div>
+                          {/* Girl Image */}
+                          <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-neutral-950">
+                            <img
+                              src={girl.image}
+                              alt={girl.name}
+                              className="w-full h-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md py-0.5 px-2 rounded-full border border-neutral-800/50">
+                              <span className="text-[9px] text-[#25D366] font-bold flex items-center gap-1">
+                                <span className="w-1 h-1 rounded-full bg-[#25D366] animate-ping" />
+                                En ligne
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Details */}
+                          <div className="mt-2.5 px-0.5">
+                            <h4 className="text-[14.5px] font-bold text-white tracking-tight leading-tight">
+                              {girl.name}
+                            </h4>
+                            
+                            <div className="flex items-center gap-1 mt-1">
+                              <Star className="w-3 h-3 text-amber-400 fill-current" />
+                              <span className="text-[11px] font-bold text-amber-400">{girl.rating}</span>
+                              <span className="text-[9.5px] text-neutral-500">({girl.reviews} avis)</span>
+                            </div>
+
+                            <p className="text-[10.5px] text-neutral-400 font-light mt-1.5 leading-snug line-clamp-2">
+                              {girl.status}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          {/* WhatsApp Blurred Number Row */}
+                          <div className="mt-3 bg-neutral-950 border border-neutral-900 rounded-xl p-2 flex flex-col items-center justify-center">
+                            <span className="text-[8.5px] font-extrabold text-neutral-500 tracking-wider uppercase mb-0.5">
+                              WHATSAPP
+                            </span>
+                            <div className="flex items-center gap-0.5 font-mono text-[11.5px] font-bold text-white">
+                              <span className="text-[#25D366]">{visitorCallingCode}</span>
+                              <span className="blur-[3px] select-none text-slate-400 tracking-wider"> 65•••</span>
+                            </div>
+                          </div>
+
+                          {/* Unlock Action Button */}
+                          <button
+                            onClick={() => {
+                              const el = document.getElementById("btn-unlock-numbers");
+                              if (el) {
+                                el.scrollIntoView({ behavior: 'smooth' });
+                                el.classList.add("ring-4", "ring-[#25D366]/40");
+                                setTimeout(() => el.classList.remove("ring-4", "ring-[#25D366]/40"), 1500);
+                              }
+                            }}
+                            className="w-full mt-2 flex items-center justify-center gap-1 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 text-[#25D366] font-semibold text-[11px] py-1.5 px-2.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-95"
+                          >
+                            <Lock className="w-3 h-3 shrink-0" />
+                            <span>Débloquer</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
