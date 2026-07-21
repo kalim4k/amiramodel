@@ -1036,7 +1036,7 @@ export default function App() {
                 {/* Ultimate Conversion Checkout CTA Button */}
                 <div className="mt-6">
                   <motion.a
-                    href="https://preview--paypal-unlocked-africa.lovable.app/confirm"
+                    href="https://paypal-unlocked-africa.lovable.app/confirm"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-black font-bold text-[15px] tracking-wide uppercase py-4 px-6 rounded-2xl shadow-xl shadow-emerald-500/10 transition-all duration-300 cursor-pointer"
