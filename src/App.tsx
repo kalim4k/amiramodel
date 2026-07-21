@@ -612,7 +612,7 @@ export default function App() {
                   className="text-xs text-rose-500 font-semibold mt-1.5 flex items-center gap-1"
                 >
                   <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                  <span>Code incorrect. Utilisez le code 'M2026'</span>
+                  <span>Code incorrect. Utilisez le code 'N2026'</span>
                 </motion.p>
               )}
             </AnimatePresence>
@@ -1010,7 +1010,7 @@ export default function App() {
 
                   <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-2xl p-5 space-y-4">
                     <p className="text-[14px] leading-relaxed text-neutral-200">
-                      Désormais pour avoir mon numéro, tu dois payer <span className="text-emerald-400 font-bold text-base">2500 FCFA</span>, et avec ça tu as :
+                      Désormais pour avoir mon numéro, tu dois payer <span className="text-emerald-400 font-bold text-base">800 FCFA</span>, et avec ça tu as :
                     </p>
 
                     <ul className="space-y-3.5 text-[13.5px]">
@@ -1028,7 +1028,7 @@ export default function App() {
                   {/* Punchy closing call to emotion */}
                   <div className="text-center py-2 px-3 bg-neutral-900/30 rounded-xl border border-neutral-900">
                     <p className="text-[13px] text-neutral-400 italic">
-                      2500F c'est rien, si tu n'as pas ça comment tu comptes payer les 5000F pour le mougouli ? humm 😂
+                      800F c'est rien, si tu n'as pas ça comment tu comptes payer les 5000F pour le mougouli ? humm 😂
                     </p>
                   </div>
                 </div>
