@@ -656,15 +656,15 @@ export default function App() {
         preload="metadata"
       />
       
-      {/* Absolute Decorative Ambient Background Blurs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-rose-500/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none" />
-
       {/* Main Container */}
       <div 
         id="profile-card"
         className="w-full max-w-md min-h-screen sm:min-h-[850px] bg-[#0c0c0c] sm:rounded-3xl shadow-2xl border-0 sm:border border-neutral-900 overflow-hidden flex flex-col justify-between relative"
       >
+        {/* Absolute Decorative Ambient Background Blurs (contained inside overflow-hidden to prevent extra scroll space) */}
+        <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-rose-500/10 blur-[120px] pointer-events-none z-0" />
+        <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none z-0" />
+
         <AnimatePresence mode="wait">
           {!showPaywall ? (
             /* --- PRIMARY PROFILE VIEW --- */
